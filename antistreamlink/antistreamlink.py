@@ -25,8 +25,8 @@ class Antistreamlink:
         self.bot = bot
         self.location = 'data/antistreamlink/settings.json'
         self.json = dataIO.load_json(self.location)
-        self.regex = re.compile(r"<?(https?:\/\/)?(www\.)?(discord\.gg|discordapp\.com\/invite)\b([-a-zA-Z0-9/]*)>?")
-        self.regex_discordme = re.compile(r"<?(https?:\/\/)?(www\.)?(discord\.me\/)\b([-a-zA-Z0-9/]*)>?")
+        self.regex = re.compile(r"<?(https?:\/\/)?(www\.|go\.|clips\.)?(twitch\.tv\/)\b([-a-zA-Z0-9/]*)>?")
+        self.regex_discordme = re.compile(r"<?(https?:\/\/)?(www\.|gaming\.)?(youtube\.com\/|youtu\.be\/)\b([-a-zA-Z0-9/]*)>?")
         self.regex_url = re.compile(r'(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))')
         self.emoji_string = "https://cdn.discordapp.com/emojis"
 
