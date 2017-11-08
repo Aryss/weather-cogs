@@ -1,8 +1,8 @@
 {
     "AUTHOR" : "_Lynx",
-    "INSTALL_MSG" : "Thanks for installing Antilink\nThis cog will block any stream/video link that isn't send by a mod/admin\n\n",
-    "NAME" : "AntiStreamLink",
-    "SHORT" : "Automatically remove stream\video links from users",
-    "DESCRIPTION" : "Automatically remove stream\video links from users.",
+    "INSTALL_MSG" : "Thanks for installing Antilfg\nThis cog will block most lfg messages thatare not sent by a mod/admin\n\n",
+    "NAME" : "Antilfg",
+    "SHORT" : "Automatically remove lfg messages from users",
+    "DESCRIPTION" : "Automatically remove lfg messages from users",
     "TAGS" : ["moderation", "automated", "utility"]
 }

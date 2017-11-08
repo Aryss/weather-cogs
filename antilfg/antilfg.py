@@ -14,8 +14,8 @@ import re
 import asyncio
 
 
-class Antistreamlink:
-    """Blocks streaming/video links from users who don't have the permission 'Manage Messages'
+class antilfg:
+    """Blocks LFG messages from users who don't have the permission 'Manage Messages'
     can optionally block all links not just invites"""
 
     __author__ = "_Lynx, based on Kowlin's Antilink"
@@ -23,16 +23,15 @@ class Antistreamlink:
 
     def __init__(self, bot):
         self.bot = bot
-        self.location = 'data/antistreamlink/settings.json'
+        self.location = 'data/antilfg/settings.json'
         self.json = dataIO.load_json(self.location)
-        self.regex = re.compile(r"<?(https?:\/\/)?(www\.|go\.|clips\.)?(twitch\.tv\/)\b([-a-zA-Z0-9/]*)>?")
-        self.regex_discordme = re.compile(r"<?(https?:\/\/)?(www\.|gaming\.)?(youtube\.com\/|youtu\.be\/)\b([-a-zA-Z0-9/]*)>?")
+        self.regex = re.compile(r"(wanna (duo|squads))|(lf ?\dm)|(anyone on (xb1|xbox|ps4))|(anyone wanna play)|(need (one|two|three|1|2|3) for (FT ?..?|fireteam|squad))|(wanna play (duos|squads))|(anyone wants to play)|(lf (duos|squads|team))|(wanna play)|(up for some (games|duos|squads)\?)|((one|two|three|1|2|3) more ft ?.?.)|(LFG|LFS)|(join ft ?.?.)|(ft ?.?. need (one|two|three|1|2|3))|((duos|squads) anyone)|(ft ?.?. \+\d)", re.IGNORECASE)
         self.regex_url = re.compile(r'(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))')
         self.emoji_string = "https://cdn.discordapp.com/emojis"
 
     @commands.group(pass_context=True, no_pm=True)
-    async def antistreamlinkset(self, ctx):
-        """Manages the settings for antistreamlink."""
+    async def antilfgset(self, ctx):
+        """Manages the settings for antilfg."""
         serverid = ctx.message.server.id
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
@@ -40,20 +39,20 @@ class Antistreamlink:
             self.json[serverid] = {'toggle': False, 'message': '', 'dm': False,
                                    'strict': False, 'excluded_channels': []}
 
-    @antistreamlinkset.command(pass_context=True, no_pm=True)
+    @antilfgset.command(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(administrator=True)
     async def toggle(self, ctx):
-        """Enable/disables AntiStreamLink in the server"""
+        """Enable/disables antilfg in the server"""
         serverid = ctx.message.server.id
         if self.json[serverid]['toggle'] is True:
             self.json[serverid]['toggle'] = False
-            await self.bot.say('AntiStreamLink is now disabled')
+            await self.bot.say('antilfg is now disabled')
         elif self.json[serverid]['toggle'] is False:
             self.json[serverid]['toggle'] = True
-            await self.bot.say('AntiStreamLink is now enabled')
+            await self.bot.say('antilfg is now enabled')
         dataIO.save_json(self.location, self.json)
 
-    @antistreamlinkset.command(pass_context=True, no_pm=True)
+    @antilfgset.command(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(administrator=True)
     async def togglestrict(self, ctx):
         """remove all the links"""
@@ -66,7 +65,7 @@ class Antistreamlink:
             await self.bot.say('strictmode is now enabled')
         dataIO.save_json(self.location, self.json)
 
-    @antistreamlinkset.command(pass_context=True, no_pm=True)
+    @antilfgset.command(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(administrator=True)
     async def message(self, ctx, *, text):
         """Set the message for when the user sends a illegal stream link"""
@@ -75,9 +74,9 @@ class Antistreamlink:
         dataIO.save_json(self.location, self.json)
         await self.bot.say('Message is set')
         if self.json[serverid]['dm'] is False:
-            await self.bot.say('Remember: Direct Messages on removal is disabled!\nEnable it with ``antistreamlinkset toggledm``')
+            await self.bot.say('Remember: Direct Messages on removal is disabled!\nEnable it with ``antilfgset toggledm``')
 
-    @antistreamlinkset.command(pass_context=True, no_pm=True)
+    @antilfgset.command(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(administrator=True)
     async def toggledm(self, ctx):
         """Toggle DM's send to the offender"""
@@ -90,10 +89,10 @@ class Antistreamlink:
             await self.bot.say('Disabled DMs on removal of stream/video links')
         dataIO.save_json(self.location, self.json)
 
-    @antistreamlinkset.group(pass_context=True, no_pm=True)
+    @antilfgset.group(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(administrator=True)
     async def exclude(self, ctx):
-        """Exclude the channels where AntiStreamLink will be active"""
+        """Exclude the channels where antilfg will be active"""
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
         if "excluded_channels" not in self.json[ctx.message.server.id]:
@@ -154,7 +153,7 @@ class Antistreamlink:
                             if self.json[message.server.id]['dm'] is True:
                                 await self.bot.send_message(message.author, self.json[message.server.id]['message'])
                             break
-                elif self.regex.search(message.content) is not None or self.regex_discordme.search(message.content) is not None:
+                elif self.regex.search(message.content) is not None:
 
                     asyncio.sleep(0.5)
                     await self.bot.delete_message(message)
@@ -163,12 +162,12 @@ class Antistreamlink:
 
 
 def check_folder():
-    if not os.path.exists('data/antistreamlink'):
-        os.makedirs('data/antistreamlink')
+    if not os.path.exists('data/antilfg'):
+        os.makedirs('data/antilfg')
 
 
 def check_file():
-    f = 'data/antistreamlink/settings.json'
+    f = 'data/antilfg/settings.json'
     if dataIO.is_valid_json(f) is False:
         dataIO.save_json(f, {})
 
@@ -176,6 +175,6 @@ def check_file():
 def setup(bot):
     check_folder()
     check_file()
-    n = Antistreamlink(bot)
+    n = antilfg(bot)
     bot.add_cog(n)
     bot.add_listener(n._new_message, 'on_message')
