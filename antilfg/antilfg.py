@@ -25,7 +25,7 @@ class antilfg:
         self.bot = bot
         self.location = 'data/antilfg/settings.json'
         self.json = dataIO.load_json(self.location)
-        self.regex = re.compile(r"(wanna (duo|squads))|(lf ?\dm)|(anyone on (xb1|xbox|ps4))|(anyone wanna play)|(need (one|two|three|1|2|3) for (FT ?..?|fireteam|squad))|(wanna play (duos|squads))|(anyone wants to play)|(lf (duos|squads|team))|(wanna play)|(up for some (games|duos|squads)\?)|((one|two|three|1|2|3) more ft ?.?.)|(LFG|LFS)|(join ft ?.?.)|(ft ?.?. need (one|two|three|1|2|3))|((duos|squads) anyone)|(ft ?.?. \+\d)", re.IGNORECASE)
+        self.regex = re.compile(r"(wanna (duo|squads))|(lf ?\dm)|(anyone on (xb1|xbox|ps4))|(anyo?n?e? wanna play)|(need (one|two|three|1|2|3) for (FT ?..?|fireteam|squad))|(wanna play (duos|squads))|((any|wh)o?n?e? wants? to play)|(lf (duos|squads|team))|(wanna play)|(up for some (games|duos|squads)\?)|((one|two|three|1|2|3) more ft ?.?.)|(LFG|LFS)|(join ft ?.?.)|(ft ?.?. need (one|two|three|1|2|3) more)|((duos|squads) anyone)|(anyone up to play)|(looking for a? ?(team|squad))|(who wants to do (squads|duos?))", re.IGNORECASE)
         self.regex_url = re.compile(r'(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))')
         self.emoji_string = "https://cdn.discordapp.com/emojis"
 
