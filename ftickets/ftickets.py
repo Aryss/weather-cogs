@@ -124,8 +124,8 @@ class FTickets:
 
     @commands.command(aliases=["dt"], pass_context=True)
     @checks.mod_or_permissions(manage_messages=True)
-    async def deleteticket(self, ctx, num: int=1):
-        """Deletes any number of tickets, default = 1"""
+    async def deleteticket(self, ctx, num: len(self.tickets)):
+        """Deletes any number of tickets, default = last one"""
         if num < 0:
             await send_cmd_help(ctx)
             return
@@ -133,7 +133,7 @@ class FTickets:
             num = len(self.tickets)
             del self.tickets[num]
         else:
-            del self.tickets[num]
+            del self.tickets[num-1]
         fileIO("data/tickets/tickets.json", "save", self.tickets)
         await self.bot.say("Ticket #{} deleted.\n{} tickets remaining.".format(
             num, len(self.tickets)))
