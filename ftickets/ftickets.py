@@ -5,11 +5,11 @@ from __main__ import send_cmd_help
 import os
 
 
-class Tickets:
+class FTickets:
     def __init__(self, bot):
         self.bot = bot
-        self.tickets = fileIO("data/tickets/tickets.json", "load")
-        self.settings = fileIO("data/tickets/settings.json", "load")
+        self.tickets = fileIO("data/ftickets/tickets.json", "load")
+        self.settings = fileIO("data/ftickets/settings.json", "load")
 
     @property
     def ticket_limit(self):
@@ -22,7 +22,7 @@ class Tickets:
     @ticket_limit.setter
     def ticket_limit(self, num):
         self.settings["TICKETS_PER_USER"] = num
-        fileIO("data/tickets/settings.json", "save", self.settings)
+        fileIO("data/ftickets/settings.json", "save", self.settings)
 
     @property
     def keep_on_read(self):
@@ -35,7 +35,7 @@ class Tickets:
     @keep_on_read.setter
     def keep_on_read(self, value):
         self.settings["KEEP_ON_READ"] = bool(value)
-        fileIO("data/tickets/settings.json", "save", self.settings)
+        fileIO("data/ftickets/settings.json", "save", self.settings)
 
     @property
     def reply_to_user(self):
@@ -48,7 +48,7 @@ class Tickets:
     @reply_to_user.setter
     def reply_to_user(self, val):
         self.settings["REPLY_TO_USER"] = val
-        fileIO("data/tickets/settings.json", "save", self.settings)
+        fileIO("data/ftickets/settings.json", "save", self.settings)
 
     def _get_ticket(self):
         if len(self.tickets) > 0:
@@ -59,7 +59,7 @@ class Tickets:
                     ticket[idnum].get("message", "no_message")
             if not self.keep_on_read:
                 self.tickets = self.tickets[1:]
-                fileIO("data/tickets/tickets.json", "save", self.tickets)
+                fileIO("data/ftickets/tickets.json", "save", self.tickets)
             return ret
         else:
             return "No more tickets!"
@@ -72,7 +72,7 @@ class Tickets:
     def _add_ticket(self, author, message):
         self.tickets.append(
             {author.id: {"name": author.name, "message": message}})
-        fileIO("data/tickets/tickets.json", "save", self.tickets)
+        fileIO("data/ftickets/tickets.json", "save", self.tickets)
 
     @commands.command(aliases=["nt"], pass_context=True)
     @checks.mod_or_permissions(manage_messages=True)
@@ -152,7 +152,7 @@ class Tickets:
             await send_cmd_help(ctx)
             return
         self.settings["TICKETS_PER_USER"] = num
-        fileIO("data/tickets/settings.json", "save", self.settings)
+        fileIO("data/ftickets/settings.json", "save", self.settings)
         await self.bot.say("Tickets per user set to {}".format(num))
 
     @ticketset.command(name="keep", pass_context=True)
@@ -174,22 +174,22 @@ class Tickets:
 
 
 def check_folder():
-    if not os.path.exists("data/tickets"):
+    if not os.path.exists("data/ftickets"):
         print("Creating data/tickets folder...")
-        os.makedirs("data/tickets")
+        os.makedirs("data/ftickets")
 
 
 def check_file():
     tickets = []
-    settings = {"TICKETS_PER_USER": 1,
-                "REPLY_TO_USER": False, "KEEP_ON_READ": False}
+    settings = {"TICKETS_PER_USER": 0,
+                "REPLY_TO_USER": False, "KEEP_ON_READ": True}
 
-    f = "data/tickets/tickets.json"
+    f = "data/ftickets/tickets.json"
     if not fileIO(f, "check"):
         print("Creating default tickets's tickets.json...")
         fileIO(f, "save", tickets)
 
-    f = "data/tickets/settings.json"
+    f = "data/ftickets/settings.json"
     if not fileIO(f, "check"):
         print("Creating default tickets's settings.json...")
         fileIO(f, "save", settings)
