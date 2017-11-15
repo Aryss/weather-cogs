@@ -131,11 +131,11 @@ class FTickets:
             return
         if num > len(self.tickets):
             num = len(self.tickets)
-            self.tickets = []
+            del self.tickets[num]
         else:
-            self.tickets = self.tickets[num:]
+            del self.tickets[num]
         fileIO("data/tickets/tickets.json", "save", self.tickets)
-        await self.bot.say("{} tickets deleted.\n{} tickets remaining.".format(
+        await self.bot.say("Ticket #{} deleted.\n{} tickets remaining.".format(
             num, len(self.tickets)))
 
     @commands.group(pass_context=True)
