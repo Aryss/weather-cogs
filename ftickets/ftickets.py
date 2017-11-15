@@ -95,7 +95,10 @@ class FTickets:
         while tindex < len(self.tickets):
             ticket = self.tickets[tindex]
             for idnum in ticket:
-                ret = ticket[idnum].get("name", "no_name") + ": " + \ticket[idnum].get("message", "no_message")
+                ret = ticket[idnum].get(
+                    "name", "no_name") + ": " + \
+                    ticket[idnum].get("message", "no_message")
+                ret = "#" + count + ":" + ret
             asyncio.sleep(0.5)
             await self.bot.send_message(reply, ret)    
             tindex += 1
