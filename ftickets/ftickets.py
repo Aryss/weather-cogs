@@ -98,7 +98,7 @@ class FTickets:
                 ret = ticket[idnum].get(
                     "name", "no_name") + ": " + \
                     ticket[idnum].get("message", "no_message")
-                ret = "#" + count + ":" + ret
+                ret = "#" + str(count) + ":" + ret
             asyncio.sleep(0.5)
             await self.bot.send_message(reply, ret)    
             tindex += 1
