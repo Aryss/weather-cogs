@@ -3,6 +3,7 @@ from cogs.utils.dataIO import fileIO
 from cogs.utils import checks
 from __main__ import send_cmd_help
 import os
+import asyncio
 
 
 class FTickets:
