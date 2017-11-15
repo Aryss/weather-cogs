@@ -199,4 +199,4 @@ def setup(bot):
     check_folder()
     check_file()
     n = FTickets(bot)
-bot.add_cog(n)
+    bot.add_cog(n)
