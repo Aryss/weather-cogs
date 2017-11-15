@@ -92,7 +92,7 @@ class FTickets:
         reply = ctx.message.author
         tindex = 0
         while tindex < len(self.tickets):
-            ticket = self.tickets[0]
+            ticket = self.tickets[tindex]
             for idnum in ticket:
                 ret = ticket[idnum].get(
                     "name", "no_name") + ": " + \
