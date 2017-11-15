@@ -131,7 +131,7 @@ class FTickets:
             return
         if num > len(self.tickets):
             num = len(self.tickets)
-            del self.tickets[num]
+            del self.tickets[num-1]
         else:
             del self.tickets[num-1]
         fileIO("data/tickets/tickets.json", "save", self.tickets)
