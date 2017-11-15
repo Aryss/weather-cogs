@@ -91,10 +91,11 @@ class FTickets:
         """Lists all tickets"""
         reply = ctx.message.author
         tindex = 0
+        count = tindex + 1
         while tindex < len(self.tickets):
             ticket = self.tickets[tindex]
             for idnum in ticket:
-                ret = ticket[idnum].get(
+                ret = "#" + count + ticket[idnum].get(
                     "name", "no_name") + ": " + \
                     ticket[idnum].get("message", "no_message")
             asyncio.sleep(0.5)
