@@ -92,8 +92,13 @@ class FTickets:
         reply = ctx.message.author
         tindex = 0
         while tindex < len(self.tickets):
+            ticket = self.tickets[0]
+            for idnum in ticket:
+                ret = ticket[idnum].get(
+                    "name", "no_name") + ": " + \
+                    ticket[idnum].get("message", "no_message")
             asyncio.sleep(0.5)
-            await self.bot.send_message(reply, self._get_ticket())    
+            await self.bot.send_message(reply, ret)    
             tindex += 1
 
     @commands.command(pass_context=True)
