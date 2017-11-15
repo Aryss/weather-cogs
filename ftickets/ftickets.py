@@ -125,7 +125,7 @@ class FTickets:
 
     @commands.command(aliases=["dt"], pass_context=True)
     @checks.mod_or_permissions(manage_messages=True)
-    async def deleteticket(self, ctx, num: len(self.tickets)):
+    async def deleteticket(self, ctx, num):
         """Deletes any number of tickets, default = last one"""
         if num < 0:
             await send_cmd_help(ctx)
