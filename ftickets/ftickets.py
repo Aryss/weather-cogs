@@ -112,8 +112,8 @@ class FTickets:
                 ctx.message.author.mention))
             return
         self._add_ticket(ctx.message.author, message)
-        await self.bot.say("{}, ticket added.".format(
-            ctx.message.author.mention))
+        await self.bot.say("Ticket #{} added.".format(
+            num, len(self.tickets)))
 
     @commands.command(aliases=['ct'])
     @checks.mod_or_permissions(manage_messages=True)
