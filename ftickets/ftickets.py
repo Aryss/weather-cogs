@@ -127,7 +127,7 @@ class FTickets:
     @commands.command(aliases=["dt"], pass_context=True)
     @checks.mod_or_permissions(manage_messages=True)
     async def delticket(self, ctx, num = -1):
-        """Deletes the specified ticket default = none"""
+        """Deletes the specified ticket, default = none. Check the number of available tickets using !listtickets before using."""
         if num < 0:
             await send_cmd_help(ctx)
             return
