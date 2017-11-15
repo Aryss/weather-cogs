@@ -95,7 +95,7 @@ class FTickets:
         while tindex < len(self.tickets):
             ticket = self.tickets[tindex]
             for idnum in ticket:
-                ret = "#" + count + ticket[idnum].get(
+                ret = "#" + count + \ticket[idnum].get(
                     "name", "no_name") + ": " + \
                     ticket[idnum].get("message", "no_message")
             asyncio.sleep(0.5)
@@ -125,7 +125,7 @@ class FTickets:
 
     @commands.command(aliases=["dt"], pass_context=True)
     @checks.mod_or_permissions(manage_messages=True)
-    async def deleteticket(self, ctx, num):
+    async def delticket(self, ctx, num):
         """Deletes any number of tickets, default = last one"""
         if num < 0:
             await send_cmd_help(ctx)
