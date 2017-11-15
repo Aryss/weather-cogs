@@ -198,5 +198,5 @@ def check_file():
 def setup(bot):
     check_folder()
     check_file()
-    n = Tickets(bot)
+    n = FTickets(bot)
 bot.add_cog(n)
