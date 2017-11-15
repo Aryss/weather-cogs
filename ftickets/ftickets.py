@@ -90,7 +90,7 @@ class FTickets:
         """Lists all tickets"""
         reply = ctx.message.author
         tindex = 0
-        while i < len(self.tickets):
+        while tindex < len(self.tickets):
             asyncio.sleep(0.5)
             await self.bot.send_message(reply, self._get_ticket())    
             tindex += 1
