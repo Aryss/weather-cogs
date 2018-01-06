@@ -564,7 +564,7 @@ class Streamru:
             print("Error during convertion of twitch usernames to IDs: "
                   "{}".format(e))
 
-        while self == self.bot.get_cog("Streamsru"):
+        while self == self.bot.get_cog("Streamru"):
             save = False
 
             streams = ((self.twitch_streams,  self.twitch_online),
@@ -688,7 +688,7 @@ def setup(bot):
     logger.setLevel(50)  # Stops warning spam
     check_folders()
     check_files()
-    n = Streams(bot)
+    n = Streamru(bot)
     loop = asyncio.get_event_loop()
     loop.create_task(n.stream_checker())
     bot.add_cog(n)
