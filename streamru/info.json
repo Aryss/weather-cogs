@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "??, modified by _Lynx",
+    "DESCRIPTION" : "RU Localized Stream plugin.",
+    "DISABLED" : false,
+    "SHORT" : "Localized version of Stream plugin.",
+    "NAME" : "streamru",
+    "INSTALL_MSG" : "\nЕсли что-то пойдёт не так, пингуйте _Lynx"
+}
