@@ -34,7 +34,7 @@ class OfflineStream(StreamsError):
     pass
 
 
-class Streamsru:
+class Streamru:
     """Streams
 
     Alerts for a variety of streaming services"""
