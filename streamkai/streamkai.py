@@ -291,7 +291,7 @@ class streamkai:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
-    @streamset.command()
+    @streamsetkai.command()
     @checks.is_owner()
     async def kaitwitchtoken(self, token : str):
         """Sets the Client-ID for Twitch
@@ -301,7 +301,7 @@ class streamkai:
         dataIO.save_json("dama/streamkai/settings.json", self.settings)
         await self.bot.say('Twitch Client-ID set.')
         
-    @streamset.command()
+    @streamsetkai.command()
     @checks.is_owner()
     async def twitchgame(self, game : str):
         """Sets the Game for Twitch"""
@@ -309,7 +309,7 @@ class streamkai:
         dataIO.save_json("dama/streamkai/settings.json", self.settings)
         await self.bot.say('Game set.')
 
-    @streamset.command(pass_context=True, no_pm=True)
+    @streamsetkai.command(pass_context=True, no_pm=True)
     @checks.admin()
     async def kaimention(self, ctx, *, mention_type : str):
         """Sets mentions for stream alerts
@@ -330,7 +330,7 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/settings.json", self.settings)
 
-    @streamset.command(pass_context=True, no_pm=True)
+    @streamsetkai.command(pass_context=True, no_pm=True)
     @checks.admin()
     async def kaiautodelete(self, ctx):
         """Toggles automatic notification deletion for streams that go offline"""
