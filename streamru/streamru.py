@@ -368,7 +368,7 @@ class Streamru:
         if r.status == 200:
             if data["stream"] is None:
                 raise OfflineStream()
-            if channel["game"] == "Fortnite":
+            elif channel["game"] == "Fortnite":
                 return self.twitch_embed(data)
             else
                 raise OfflineStream()
