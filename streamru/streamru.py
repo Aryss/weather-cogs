@@ -659,9 +659,9 @@ class Streamru:
 
 
 def check_folders():
-    if not os.path.exists("data/streams"):
-        print("Creating data/streams folder...")
-        os.makedirs("data/streams")
+    if not os.path.exists("data/streamru"):
+        print("Creating data/streamru folder...")
+        os.makedirs("data/streamru")
 
 
 def check_files():
