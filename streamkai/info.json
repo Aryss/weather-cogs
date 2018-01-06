@@ -1,0 +1,8 @@
+{
+    "AUTHOR" : "Stock Red v2 cog, modeified to filter out twitch streams only for the specified game",
+    "DESCRIPTION" : "Targeted Stream plugin",
+    "DISABLED" : false,
+    "SHORT" : "Targeted Stream plugin",
+    "NAME" : "streamkai",
+    "INSTALL_MSG" : "\nIf anything goes south, ping _Lynx"
+}
