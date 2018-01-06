@@ -361,7 +361,15 @@ class streamkai:
 
         raise APIError()
 
-    async with session.get(url, headers=header) as r:
+    async def twitch_online(self, stream):
+        session = aiohttp.ClientSession()
+        url = "https://api.twitch.tv/kraken/streams/" + stream
+        header = {
+            'Client-ID': self.settings.get("TWITCH_TOKEN", ""),
+            'Accept': 'application/vnd.twitchtv.v5+json'
+        }
+
+        async with session.get(url, headers=header) as r:
             data = await r.json(encoding='utf-8')
             channel = data["stream"]["channel"]
         await session.close()
