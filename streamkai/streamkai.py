@@ -129,7 +129,7 @@ class streamkai:
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
-    @streamalert.command(name="twitchkai", pass_context=True)
+    @streamkaialert.command(name="twitchkai", pass_context=True)
     async def twitchkai_alert(self, ctx, stream: str):
         """Adds/removes twitch alerts from the current channel"""
         stream = escape_mass_mentions(stream)
@@ -163,7 +163,7 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/twitch.json", self.twitch_streams)
 
-    @streamalert.command(name="hitboxkai", pass_context=True)
+    @streamkaialert.command(name="hitboxkai", pass_context=True)
     async def hitboxkai_alert(self, ctx, stream: str):
         """Adds/removes hitbox alerts from the current channel"""
         stream = escape_mass_mentions(stream)
@@ -193,7 +193,7 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/hitbox.json", self.hitbox_streams)
 
-    @streamalert.command(name="mixerkai", pass_context=True)
+    @streamkaialert.command(name="mixerkai", pass_context=True)
     async def mixerkai_alert(self, ctx, stream: str):
         """Adds/removes mixer alerts from the current channel"""
         stream = escape_mass_mentions(stream)
@@ -223,7 +223,7 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/beam.json", self.mixer_streams)
 
-    @streamalert.command(name="picartokai", pass_context=True)
+    @streamkaialert.command(name="picartokai", pass_context=True)
     async def picartokai_alert(self, ctx, stream: str):
         """Adds/removes picarto alerts from the current channel"""
         stream = escape_mass_mentions(stream)
@@ -253,7 +253,7 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/picarto.json", self.picarto_streams)
 
-    @streamalert.command(name="stopkai", pass_context=True)
+    @streamkaialert.command(name="stopkai", pass_context=True)
     async def stopkai_alert(self, ctx):
         """Stops all streams alerts in the current channel"""
         channel = ctx.message.channel
