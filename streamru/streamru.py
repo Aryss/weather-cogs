@@ -41,11 +41,11 @@ class Streamru:
 
     def __init__(self, bot):
         self.bot = bot
-        self.twitch_streams = dataIO.load_json("data/streamsru/twitch.json")
-        self.hitbox_streams = dataIO.load_json("data/streamsru/hitbox.json")
-        self.mixer_streams = dataIO.load_json("data/streamsru/beam.json")
-        self.picarto_streams = dataIO.load_json("data/streamsru/picarto.json")
-        settings = dataIO.load_json("data/streamsru/settings.json")
+        self.twitch_streams = dataIO.load_json("data/streamru/twitch.json")
+        self.hitbox_streams = dataIO.load_json("data/streamru/hitbox.json")
+        self.mixer_streams = dataIO.load_json("data/streamru/beam.json")
+        self.picarto_streams = dataIO.load_json("data/streamru/picarto.json")
+        settings = dataIO.load_json("data/streamru/settings.json")
         self.settings = defaultdict(dict, settings)
         self.messages_cache = defaultdict(list)
 
@@ -161,7 +161,7 @@ class Streamru:
         else:
             await self.bot.say("Alert has been removed from this channel.")
 
-        dataIO.save_json("data/streamsru/twitch.json", self.twitch_streams)
+        dataIO.save_json("data/streamru/twitch.json", self.twitch_streams)
 
     @streamalert.command(name="hitbox", pass_context=True)
     async def hitbox_alert(self, ctx, stream: str):
@@ -191,7 +191,7 @@ class Streamru:
         else:
             await self.bot.say("Alert has been removed from this channel.")
 
-        dataIO.save_json("data/streamsru/hitbox.json", self.hitbox_streams)
+        dataIO.save_json("data/streamru/hitbox.json", self.hitbox_streams)
 
     @streamalert.command(name="mixer", pass_context=True)
     async def mixer_alert(self, ctx, stream: str):
@@ -221,7 +221,7 @@ class Streamru:
         else:
             await self.bot.say("Alert has been removed from this channel.")
 
-        dataIO.save_json("data/streamsru/beam.json", self.mixer_streams)
+        dataIO.save_json("data/streamru/beam.json", self.mixer_streams)
 
     @streamalert.command(name="picarto", pass_context=True)
     async def picarto_alert(self, ctx, stream: str):
@@ -251,7 +251,7 @@ class Streamru:
         else:
             await self.bot.say("Alert has been removed from this channel.")
 
-        dataIO.save_json("data/streamsru/picarto.json", self.picarto_streams)
+        dataIO.save_json("data/streamru/picarto.json", self.picarto_streams)
 
     @streamalert.command(name="stop", pass_context=True)
     async def stop_alert(self, ctx):
@@ -277,10 +277,10 @@ class Streamru:
             for s in to_delete:
                 stream_type.remove(s)
 
-        dataIO.save_json("data/streamsru/twitch.json", self.twitch_streams)
-        dataIO.save_json("data/streamsru/hitbox.json", self.hitbox_streams)
-        dataIO.save_json("data/streamsru/beam.json", self.mixer_streams)
-        dataIO.save_json("data/streamsru/picarto.json", self.picarto_streams)
+        dataIO.save_json("data/streamru/twitch.json", self.twitch_streams)
+        dataIO.save_json("data/streamru/hitbox.json", self.hitbox_streams)
+        dataIO.save_json("data/streamru/beam.json", self.mixer_streams)
+        dataIO.save_json("data/streamru/picarto.json", self.picarto_streams)
 
         await self.bot.say("There will be no more stream alerts in this "
                            "channel.")
@@ -298,7 +298,7 @@ class Streamru:
 
         https://blog.twitch.tv/client-id-required-for-kraken-api-calls-afbb8e95f843"""
         self.settings["TWITCH_TOKEN"] = token
-        dataIO.save_json("data/streamsru/settings.json", self.settings)
+        dataIO.save_json("data/streamru/settings.json", self.settings)
         await self.bot.say('Twitch Client-ID set.')
 
     @streamset.command(pass_context=True, no_pm=True)
@@ -320,7 +320,7 @@ class Streamru:
         else:
             await self.bot.send_cmd_help(ctx)
 
-        dataIO.save_json("data/streamsru/settings.json", self.settings)
+        dataIO.save_json("data/streamru/settings.json", self.settings)
 
     @streamset.command(pass_context=True, no_pm=True)
     @checks.admin()
@@ -336,7 +336,7 @@ class Streamru:
         else:
             await self.bot.say("Notifications won't be deleted anymore.")
 
-        dataIO.save_json("data/streamsru/settings.json", self.settings)
+        dataIO.save_json("data/streamru/settings.json", self.settings)
 
     async def hitbox_online(self, stream):
         url = "https://api.hitbox.tv/media/live/" + stream
@@ -611,10 +611,10 @@ class Streamru:
                     await asyncio.sleep(0.5)
 
             if save:
-                dataIO.save_json("data/streamsru/twitch.json", self.twitch_streams)
-                dataIO.save_json("data/streamsru/hitbox.json", self.hitbox_streams)
-                dataIO.save_json("data/streamsru/beam.json", self.mixer_streams)
-                dataIO.save_json("data/streamsru/picarto.json", self.picarto_streams)
+                dataIO.save_json("data/streamru/twitch.json", self.twitch_streams)
+                dataIO.save_json("data/streamru/hitbox.json", self.hitbox_streams)
+                dataIO.save_json("data/streamru/beam.json", self.mixer_streams)
+                dataIO.save_json("data/streamru/picarto.json", self.picarto_streams)
 
             await asyncio.sleep(CHECK_DELAY)
 
@@ -655,7 +655,7 @@ class Streamru:
         # We might as well delete the invalid / renamed ones
         self.twitch_streams = [s for s in self.twitch_streams if "ID" in s]
 
-        dataIO.save_json("data/streamsru/twitch.json", self.twitch_streams)
+        dataIO.save_json("data/streamru/twitch.json", self.twitch_streams)
 
 
 def check_folders():
@@ -673,11 +673,11 @@ def check_files():
     )
 
     for filename in stream_files:
-        if not dataIO.is_valid_json("data/streamsru/" + filename):
+        if not dataIO.is_valid_json("data/streamru/" + filename):
             print("Creating empty {}...".format(filename))
-            dataIO.save_json("data/streamsru/" + filename, [])
+            dataIO.save_json("data/streamru/" + filename, [])
 
-    f = "data/streamsru/settings.json"
+    f = "data/streamru/settings.json"
     if not dataIO.is_valid_json(f):
         print("Creating empty settings.json...")
         dataIO.save_json(f, {})
