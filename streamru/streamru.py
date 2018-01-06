@@ -370,7 +370,7 @@ class Streamru:
                 raise OfflineStream()
             elif channel["game"] == "Fortnite":
                 return self.twitch_embed(data)
-            else
+            else:
                 raise OfflineStream()
         elif r.status == 400:
             raise InvalidCredentials()
