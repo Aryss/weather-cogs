@@ -50,7 +50,7 @@ class streamkai:
         self.messages_cache = defaultdict(list)
 
     @commands.command()
-    async def hitbox(self, stream: str):
+    async def hitboxkai(self, stream: str):
         """Checks if hitbox stream is online"""
         stream = escape_mass_mentions(stream)
         regex = r'^(https?\:\/\/)?(www\.)?(hitbox\.tv\/)'
@@ -67,7 +67,7 @@ class streamkai:
             await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True)
-    async def twitch(self, ctx, stream: str):
+    async def twitchkai(self, ctx, stream: str):
         """Checks if twitch stream is online"""
         stream = escape_mass_mentions(stream)
         regex = r'^(https?\:\/\/)?(www\.)?(twitch\.tv\/)'
@@ -89,7 +89,7 @@ class streamkai:
             await self.bot.say(embed=embed)
 
     @commands.command()
-    async def mixer(self, stream: str):
+    async def mixerkai(self, stream: str):
         """Checks if mixer stream is online"""
         stream = escape_mass_mentions(stream)
         regex = r'^(https?\:\/\/)?(www\.)?(mixer\.com\/)'
@@ -106,7 +106,7 @@ class streamkai:
             await self.bot.say(embed=embed)
 
     @commands.command()
-    async def picarto(self, stream: str):
+    async def picartokai(self, stream: str):
         """Checks if picarto stream is online"""
         stream = escape_mass_mentions(stream)
         regex = r'^(https?\:\/\/)?(www\.)?(picarto\.tv\/)'
@@ -124,13 +124,13 @@ class streamkai:
 
     @commands.group(pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_server=True)
-    async def streamalert(self, ctx):
+    async def streamkaialert(self, ctx):
         """Adds/removes stream alerts from the current channel"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
-    @streamalert.command(name="twitch", pass_context=True)
-    async def twitch_alert(self, ctx, stream: str):
+    @streamalert.command(name="twitchkai", pass_context=True)
+    async def twitchkai_alert(self, ctx, stream: str):
         """Adds/removes twitch alerts from the current channel"""
         stream = escape_mass_mentions(stream)
         regex = r'^(https?\:\/\/)?(www\.)?(twitch\.tv\/)'
@@ -163,8 +163,8 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/twitch.json", self.twitch_streams)
 
-    @streamalert.command(name="hitbox", pass_context=True)
-    async def hitbox_alert(self, ctx, stream: str):
+    @streamalert.command(name="hitboxkai", pass_context=True)
+    async def hitboxkai_alert(self, ctx, stream: str):
         """Adds/removes hitbox alerts from the current channel"""
         stream = escape_mass_mentions(stream)
         regex = r'^(https?\:\/\/)?(www\.)?(hitbox\.tv\/)'
@@ -193,8 +193,8 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/hitbox.json", self.hitbox_streams)
 
-    @streamalert.command(name="mixer", pass_context=True)
-    async def mixer_alert(self, ctx, stream: str):
+    @streamalert.command(name="mixerkai", pass_context=True)
+    async def mixerkai_alert(self, ctx, stream: str):
         """Adds/removes mixer alerts from the current channel"""
         stream = escape_mass_mentions(stream)
         regex = r'^(https?\:\/\/)?(www\.)?(mixer\.com\/)'
@@ -223,8 +223,8 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/beam.json", self.mixer_streams)
 
-    @streamalert.command(name="picarto", pass_context=True)
-    async def picarto_alert(self, ctx, stream: str):
+    @streamalert.command(name="picartokai", pass_context=True)
+    async def picartokai_alert(self, ctx, stream: str):
         """Adds/removes picarto alerts from the current channel"""
         stream = escape_mass_mentions(stream)
         regex = r'^(https?\:\/\/)?(www\.)?(picarto\.tv\/)'
@@ -253,8 +253,8 @@ class streamkai:
 
         dataIO.save_json("dama/streamkai/picarto.json", self.picarto_streams)
 
-    @streamalert.command(name="stop", pass_context=True)
-    async def stop_alert(self, ctx):
+    @streamalert.command(name="stopkai", pass_context=True)
+    async def stopkai_alert(self, ctx):
         """Stops all streams alerts in the current channel"""
         channel = ctx.message.channel
 
@@ -286,14 +286,14 @@ class streamkai:
                            "channel.")
 
     @commands.group(pass_context=True)
-    async def streamset(self, ctx):
+    async def streamkaiset(self, ctx):
         """Stream settings"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
     @streamset.command()
     @checks.is_owner()
-    async def twitchtoken(self, token : str):
+    async def kaitwitchtoken(self, token : str):
         """Sets the Client-ID for Twitch
 
         https://blog.twitch.tv/client-id-required-for-kraken-api-calls-afbb8e95f843"""
@@ -311,7 +311,7 @@ class streamkai:
 
     @streamset.command(pass_context=True, no_pm=True)
     @checks.admin()
-    async def mention(self, ctx, *, mention_type : str):
+    async def kaimention(self, ctx, *, mention_type : str):
         """Sets mentions for stream alerts
 
         Types: everyone, here, none"""
@@ -332,7 +332,7 @@ class streamkai:
 
     @streamset.command(pass_context=True, no_pm=True)
     @checks.admin()
-    async def autodelete(self, ctx):
+    async def kaiautodelete(self, ctx):
         """Toggles automatic notification deletion for streams that go offline"""
         server = ctx.message.server
         settings = self.settings[server.id]
