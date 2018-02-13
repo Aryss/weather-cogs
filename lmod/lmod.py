@@ -18,6 +18,13 @@ class lmod:
         self.bot = bot
         self.past_names = dataIO.load_json("data/mod/past_names.json")
         self.past_nicknames = dataIO.load_json("data/mod/past_nicknames.json")
+        
+    def fetch_joined_at(self, user, server):
+        """Just a special case for someone special :^)"""
+        if user.id == "96130341705637888" and server.id == "133049272517001216":
+            return datetime.datetime(2016, 1, 10, 6, 8, 4, 443000)
+        else:
+            return user.joined_at        
     
     @commands.command(pass_context=True, no_pm=True)
     async def uinfo(self, ctx, *, user: discord.Member=None):
