@@ -158,7 +158,6 @@ class lmod:
     
 
 
-
-def setup(bot):
-    n =lmod(bot)
+def setup(bot): 
+    n = lmod(bot)
     bot.add_cog(n)
