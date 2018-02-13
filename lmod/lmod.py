@@ -160,7 +160,5 @@ class lmod:
 
 
 def setup(bot):
-    check_folder()
-    check_file()
     n =lmod(bot)
     bot.add_cog(n)
