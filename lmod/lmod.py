@@ -1,8 +1,14 @@
+import discord
 from discord.ext import commands
-from cogs.utils.dataIO import fileIO
-from cogs.utils import checks
-from __main__ import send_cmd_help
+from .utils.dataIO import dataIO
+from .utils import checks
+from __main__ import send_cmd_help, settings
+from datetime import datetime
+from collections import deque, defaultdict, OrderedDict
+from cogs.utils.chat_formatting import escape_mass_mentions, box, pagify
 import os
+import re
+import logging
 import asyncio
 
 
@@ -156,5 +162,5 @@ class lmod:
 def setup(bot):
     check_folder()
     check_file()
-    n = FTickets(bot)
+    n =lmod(bot)
     bot.add_cog(n)
