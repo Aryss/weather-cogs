@@ -6,6 +6,9 @@ from __main__ import send_cmd_help, settings
 from datetime import datetime
 from collections import deque, defaultdict, OrderedDict
 from cogs.utils.chat_formatting import escape_mass_mentions, box, pagify
+from urllib.parse import quote_plus
+import datetime
+import time
 import os
 import re
 import logging
@@ -27,6 +30,7 @@ class lmod:
             return user.joined_at        
     
     @commands.command(pass_context=True, no_pm=True)
+    @checks.mod_or_permissions(manage_messages=True)
     async def uinfo(self, ctx, *, user: discord.Member=None):
         """Shows users's informations"""
         author = ctx.message.author
