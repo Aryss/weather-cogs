@@ -58,7 +58,7 @@ class lmod:
 
         if voicechan is None:
             curvoice = "None"
-        else 
+        else:
             curvoice = voicechan
 
         if user.game is None:
