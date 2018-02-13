@@ -80,7 +80,7 @@ class lmod:
         data.add_field(name="Joined this server on", value=joined_on)
         data.add_field(name="Roles", value=roles, inline=False)
         data.add_field(name="Past names", value=prevnames, inline=False)
-        data..add_field(name="Current voice channel", value=str(voicechan), inline=False)
+        data.add_field(name="Current voice channel", value=str(voicechan), inline=False)
         data.set_footer(text="Member #{} | User ID:{}"
                              "".format(member_number, user.id))
 
