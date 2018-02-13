@@ -39,7 +39,7 @@ class lmod:
         if not user:
             user = author
             
-        has_permissions = channel.permissions_for(user).manage_messages
+        has_permissions = channel.permissions_for(author).manage_messages
         if not has_permissions:
             return
 
