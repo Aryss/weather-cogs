@@ -34,6 +34,7 @@ class lmod:
         """Shows users's informations"""
         author = ctx.message.author
         server = ctx.message.server
+        channel = ctx.message.channel
 
         if not user:
             user = author
