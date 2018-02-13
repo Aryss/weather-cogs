@@ -30,7 +30,6 @@ class lmod:
             return user.joined_at        
     
     @commands.command(pass_context=True, no_pm=True)
-    @checks.mod_or_permissions(manage_messages=True)
     async def uinfo(self, ctx, *, user: discord.Member=None):
         """Shows users's informations"""
         author = ctx.message.author
@@ -38,6 +37,10 @@ class lmod:
 
         if not user:
             user = author
+            
+        has_permissions = channel.permissions_for(server.user).manage_messages
+        if not has_permissions:
+            return
 
         roles = [x.name for x in user.roles if x.name != "@everyone"]
 
