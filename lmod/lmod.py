@@ -13,7 +13,11 @@ import asyncio
 
 
 class lmod:
-    
+
+    def __init__(self, bot):
+        self.bot = bot
+        self.past_names = dataIO.load_json("data/mod/past_names.json")
+        self.past_nicknames = dataIO.load_json("data/mod/past_nicknames.json")
     
     @commands.command(pass_context=True, no_pm=True)
     async def uinfo(self, ctx, *, user: discord.Member=None):
