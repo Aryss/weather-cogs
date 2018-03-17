@@ -45,7 +45,7 @@ class lmod:
 
         roles = [x.name for x in user.roles if x.name != "@everyone"]
 
-        joined_at = self.fetch_joined_at(user, server)
+        joined_at = user.joined_at
         since_created = (ctx.message.timestamp - user.created_at).days
         since_joined = (ctx.message.timestamp - joined_at).days
         user_joined = joined_at.strftime("%d %b %Y %H:%M")
