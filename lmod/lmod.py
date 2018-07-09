@@ -113,7 +113,7 @@ class lmod:
         name = " ~ ".join((name, user.nick)) if user.nick else name
 
         if user.avatar_url:
-            data.set_author(name=name, url=user.avatar_url)
+            data.set_author(name=name, url=user.avatar_url.replace(".webp", ".png"))
             data.set_thumbnail(url=user.avatar_url)
         else:
             data.set_author(name=name)
