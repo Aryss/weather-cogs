@@ -6,7 +6,6 @@ from __main__ import send_cmd_help, settings
 from datetime import datetime
 from collections import deque, defaultdict, OrderedDict
 from cogs.utils.chat_formatting import escape_mass_mentions, box, pagify
-from urllib.parse import quote_plus
 import time
 import os
 import re
@@ -19,7 +18,6 @@ ACTIONS_REPR = {
     "KICK"    : ("Kick", "\N{WOMANS BOOTS}"),
     "CMUTE"   : ("Channel mute", "\N{SPEAKER WITH CANCELLATION STROKE}"),
     "SMUTE"   : ("Server mute", "\N{SPEAKER WITH CANCELLATION STROKE}"),
-    "DELETE"  : ("Delete", "\N{SPEAKER WITH CANCELLATION STROKE}"),
     "SOFTBAN" : ("Softban", "\N{DASH SYMBOL} \N{HAMMER}"),
     "HACKBAN" : ("Preemptive ban", "\N{BUST IN SILHOUETTE} \N{HAMMER}"),
     "UNBAN"   : ("Unban", "\N{DOVE OF PEACE}")
@@ -30,7 +28,6 @@ ACTIONS_CASES = {
     "KICK"    : True,
     "CMUTE"   : False,
     "SMUTE"   : True,
-    "DELETE"  : True,
     "SOFTBAN" : True,
     "HACKBAN" : True,
     "UNBAN"   : True
@@ -144,23 +141,14 @@ class Mod:
                            "`{}set adminrole`".format(ctx.prefix))
 
     @modset.command(name="modrole", pass_context=True, no_pm=True, hidden=True)
-    async def _modset_modrole(self, ctx, *, role: discord.Role):
-        """Allows administrators to set modrole"""
-        server = ctx.message.server
-        channel = ctx.message.channel
-        author = ctx.message.author
-        if not channel.permissions_for(author).administrator:
-            await self.bot.say("You don't have sufficient permissions to do this")
-            return
-        if server.id not in self.bot.settings.servers:
-            await self.bot.say("Remember to set adminrole too.")
-        self.bot.settings.set_server_mod(server, role.name)
-        await self.bot.say("Mod role set to '{}'".format(role.name))
+    async def _modset_modrole(self, ctx):
+        """Use [p]set modrole instead"""
+        await self.bot.say("This command has been renamed "
+                           "`{}set modrole`".format(ctx.prefix))
 
     @modset.command(pass_context=True, no_pm=True)
     async def modlog(self, ctx, channel : discord.Channel=None):
         """Sets a channel as mod log
-
         Leaving the channel parameter empty will deactivate it"""
         server = ctx.message.server
         if channel:
@@ -178,7 +166,6 @@ class Mod:
     @modset.command(pass_context=True, no_pm=True)
     async def bandelete(self, ctx, days_to_clean : int=False):
         """Sets default number of days to delete when issuing a ban
-
         Accepted values: 0 to 7"""
         channel = ctx.message.channel
         server = ctx.message.server
@@ -197,7 +184,6 @@ class Mod:
     @modset.command(pass_context=True, no_pm=True)
     async def banmentionspam(self, ctx, max_mentions : int=False):
         """Enables auto ban for messages mentioning X different people
-
         Accepted values: 5 or superior"""
         server = ctx.message.server
         if max_mentions:
@@ -241,7 +227,6 @@ class Mod:
     async def deletedelay(self, ctx, time: int=None):
         """Sets the delay until the bot removes the command message.
             Must be between -1 and 60.
-
         A delay of -1 means the bot will not remove the message."""
         server = ctx.message.server
         if time is not None:
@@ -270,7 +255,6 @@ class Mod:
     @modset.command(pass_context=True, no_pm=True, name='cases')
     async def set_cases(self, ctx, action: str = None, enabled: bool = None):
         """Enables or disables case creation for each type of mod action
-
         Enabled can be 'on' or 'off'"""
         server = ctx.message.server
 
@@ -367,7 +351,6 @@ class Mod:
     @checks.admin_or_permissions(ban_members=True)
     async def ban(self, ctx, user: discord.Member, days: str = None, *, reason: str = None):
         """Bans user and deletes last X days worth of messages.
-
         If days is not a number, it's treated as the first word of the reason.
         Minimum 0 days, maximum 7. Defaults to 0."""
         author = ctx.message.author
@@ -419,7 +402,7 @@ class Mod:
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(ban_members=True)
     async def unban(self, ctx, user_id: int, *, reason: str = None):
-        """Unbans user"""
+        """Unbans user. Only accepts IDs"""
         user_id = str(user_id)
         author = ctx.message.author
         server = author.server
@@ -447,7 +430,6 @@ class Mod:
     @checks.admin_or_permissions(ban_members=True)
     async def hackban(self, ctx, user_id: int, *, reason: str = None):
         """Preemptively bans user from the server
-
         A user ID needs to be provided
         If the user is present in the server a normal ban will be
         issued instead"""
@@ -462,13 +444,14 @@ class Mod:
             await self.bot.say("User is already banned.")
             return
 
+        days = self.settings[server.id]["defbandays"]
         user = server.get_member(user_id)
         if user is not None:
             await ctx.invoke(self.ban, user=user, reason=reason)
             return
 
         try:
-            await self.bot.http.ban(user_id, server.id, 1)
+            await self.bot.http.ban(user_id, server.id, days)
         except discord.NotFound:
             await self.bot.say("User not found. Have you provided the "
                                "correct user ID?")
@@ -543,7 +526,6 @@ class Mod:
     @checks.admin_or_permissions(manage_nicknames=True)
     async def rename(self, ctx, user : discord.Member, *, nickname=""):
         """Changes user's nickname
-
         Leaving the nickname empty will remove it."""
         nickname = nickname.strip()
         if nickname == "":
@@ -559,7 +541,6 @@ class Mod:
     @checks.mod_or_permissions(administrator=True)
     async def mute(self, ctx, user : discord.Member, *, reason: str = None):
         """Mutes user in the channel/server
-
         Defaults to channel"""
         if ctx.invoked_subcommand is None:
             await ctx.invoke(self.channel_mute, user=user, reason=reason)
@@ -649,7 +630,6 @@ class Mod:
     @checks.mod_or_permissions(administrator=True)
     async def unmute(self, ctx, user : discord.Member):
         """Unmutes user in the channel/server
-
         Defaults to channel"""
         if ctx.invoked_subcommand is None:
             await ctx.invoke(self.channel_unmute, user=user)
@@ -756,10 +736,8 @@ class Mod:
     @cleanup.command(pass_context=True, no_pm=True)
     async def text(self, ctx, text: str, number: int):
         """Deletes last X messages matching the specified text.
-
         Example:
         cleanup text \"test\" 5
-
         Remember to use double quotes."""
 
         channel = ctx.message.channel
@@ -805,7 +783,6 @@ class Mod:
     @cleanup.command(pass_context=True, no_pm=True)
     async def user(self, ctx, user: discord.Member, number: int):
         """Deletes last X messages from specified user.
-
         Examples:
         cleanup user @\u200bTwentysix 2
         cleanup user Red 6"""
@@ -856,11 +833,9 @@ class Mod:
     @cleanup.command(pass_context=True, no_pm=True)
     async def after(self, ctx, message_id : int):
         """Deletes all messages after specified message
-
         To get a message id, enable developer mode in Discord's
         settings, 'appearance' tab. Then right click a message
         and copy its id.
-
         This command only works on bots running as bot accounts.
         """
 
@@ -899,7 +874,6 @@ class Mod:
     @cleanup.command(pass_context=True, no_pm=True)
     async def messages(self, ctx, number: int):
         """Deletes last X messages.
-
         Example:
         cleanup messages 26"""
 
@@ -990,12 +964,10 @@ class Mod:
     @cleanup.command(pass_context=True, name='self')
     async def cleanup_self(self, ctx, number: int, match_pattern: str = None):
         """Cleans up messages owned by the bot.
-
         By default, all messages are cleaned. If a third argument is specified,
         it is used for pattern matching: If it begins with r( and ends with ),
         then it is interpreted as a regex, and messages that match it are
         deleted. Otherwise, it is used in a simple substring test.
-
         Some helpful regex flags to include in your pattern:
         Dots match newlines: (?s); Ignore case: (?i); Both: (?si)
         """
@@ -1068,7 +1040,6 @@ class Mod:
     @checks.mod_or_permissions(manage_messages=True)
     async def reason(self, ctx, case, *, reason : str=""):
         """Lets you specify a reason for mod-log's cases
-
         Defaults to last case assigned to yourself, if available."""
         author = ctx.message.author
         server = author.server
@@ -1114,7 +1085,6 @@ class Mod:
     @ignore.command(name="channel", pass_context=True)
     async def ignore_channel(self, ctx, channel: discord.Channel=None):
         """Ignores channel
-
         Defaults to current one"""
         current_ch = ctx.message.channel
         if not channel:
@@ -1154,7 +1124,6 @@ class Mod:
     @unignore.command(name="channel", pass_context=True)
     async def unignore_channel(self, ctx, channel: discord.Channel=None):
         """Removes channel from ignore list
-
         Defaults to current one"""
         current_ch = ctx.message.channel
         if not channel:
@@ -1193,7 +1162,6 @@ class Mod:
     @checks.mod_or_permissions(manage_messages=True)
     async def _filter(self, ctx):
         """Adds/removes words from filter
-
         Use double quotes to add/remove sentences
         Using this command with no subcommands will send
         the list of the server's filtered words."""
@@ -1214,7 +1182,6 @@ class Mod:
     @_filter.command(name="add", pass_context=True)
     async def filter_add(self, ctx, *words: str):
         """Adds words to the filter
-
         Use double quotes to add sentences
         Examples:
         filter add word1 word2 word3
@@ -1239,7 +1206,6 @@ class Mod:
     @_filter.command(name="remove", pass_context=True)
     async def filter_remove(self, ctx, *words: str):
         """Remove words from the filter
-
         Use double quotes to remove sentences
         Examples:
         filter remove word1 word2 word3
@@ -1272,7 +1238,6 @@ class Mod:
     @editrole.command(aliases=["color"], pass_context=True)
     async def colour(self, ctx, role: discord.Role, value: discord.Colour):
         """Edits a role's colour
-
         Use double quotes if the role contains spaces.
         Colour must be in hexadecimal format.
         \"http://www.w3schools.com/colors/colors_picker.asp\"
@@ -1295,7 +1260,6 @@ class Mod:
     @checks.admin_or_permissions(administrator=True)
     async def edit_role_name(self, ctx, role: discord.Role, name: str):
         """Edits a role's name
-
         Use double quotes if the role or the name contain spaces.
         Examples:
         !editrole name \"The Transistor\" Test"""
@@ -1417,14 +1381,16 @@ class Mod:
         else:
             return mod.top_role.position > user.top_role.position or is_special
 
-    async def new_case(self, server, *, action, mod=None, user, reason=None, until=None, channel=None):
+    async def new_case(self, server, *, action, mod=None, user, reason=None, until=None, channel=None, force_create=False):
         action_type = action.lower() + "_cases"
-        if not self.settings[server.id].get(action_type, default_settings[action_type]):
-            return
+        
+        enabled_case = self.settings.get(server.id, {}).get(action_type, default_settings.get(action_type))
+        if not force_create and not enabled_case:
+            return False
 
         mod_channel = server.get_channel(self.settings[server.id]["mod-log"])
         if mod_channel is None:
-            return
+            return None
 
         if server.id not in self.cases:
             self.cases[server.id] = {}
@@ -1445,7 +1411,7 @@ class Mod:
             "amended_by"   : None,
             "amended_id"   : None,
             "message"      : None,
-            "until"        : None,
+            "until"        : until.timestamp() if until else None,
         }
 
         case_msg = self.format_case_msg(case)
@@ -1462,6 +1428,8 @@ class Mod:
             self.last_case[server.id][mod.id] = case_n
 
         dataIO.save_json("data/mod/modlog.json", self.cases)
+
+        return case_n
 
     async def update_case(self, server, *, case, mod=None, reason=None,
                           until=False):
@@ -1569,23 +1537,13 @@ class Mod:
                         pass
         return False
 
-# ====================================================
-# TODO:
-# - Add automated warning for multiple repeats
-# - Add case for deletion of messages 
-# - Add automated ban for pervasive users
-# ====================================================
     async def check_duplicates(self, message):
         server = message.server
         author = message.author
-        channel = message.channel
         if server.id not in self.settings:
             return False
         if self.settings[server.id]["delete_repeats"]:
             if not message.content:
-                return False
-            # _Lynx: we don't want to throttle mods
-            if channel.permissions_for(author).manage_messages:
                 return False
             if author.id not in self.cache:
                 self.cache[author.id] = deque(maxlen=3)
@@ -1596,12 +1554,6 @@ class Mod:
             msgs = self.cache[author.id]
             if len(msgs) == 3 and msgs[0] == msgs[1] == msgs[2]:
                 try:
-                    reason = "Deleted repeated message: "
-                    await self.new_case(server,
-                                action="DELETE",
-                                mod=server.me,
-                                user=author,
-                                reason=reason + message.content)
                     await self.bot.delete_message(message)
                     return True
                 except:
@@ -1800,4 +1752,4 @@ def setup(bot):
         logger.addHandler(handler)
     n = Mod(bot)
     bot.add_listener(n.check_names, "on_member_update")
-    bot.add_cog(n)
+	bot.add_cog(n)
